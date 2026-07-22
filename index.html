@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#0e7c66">
+<title>Posture Reset: Pelvis + Upper Back</title>
+<style>
+  :root{
+    --bg:#f6f8f7; --card:#ffffff; --ink:#1c2b2d; --muted:#5c6f72;
+    --accent:#0e7c66; --accent-soft:#e2f2ee; --accent2:#c96f2e; --accent2-soft:#faeede;
+    --upper:#3d5aa9; --upper-soft:#e8edf9;
+    --line:#e3e9e8; --done:#0e7c66;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding:24px 16px 64px}
+  .wrap{max-width:860px;margin:0 auto}
+  header h1{font-size:1.7rem;letter-spacing:-0.02em;margin-bottom:4px}
+  header p.sub{color:var(--muted);font-size:.95rem;max-width:660px}
+  .pill{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:.75rem;padding:3px 10px;border-radius:999px;margin-bottom:10px;letter-spacing:.03em;text-transform:uppercase}
+
+  .progress-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;margin:20px 0 8px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .progress-num{font-size:1.9rem;font-weight:700;color:var(--accent);min-width:90px}
+  .progress-num span{font-size:.85rem;color:var(--muted);font-weight:500;display:block}
+  .bar{flex:1;min-width:200px;height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0%;background:var(--accent);border-radius:99px;transition:width .3s}
+  .note-mem{font-size:.75rem;color:var(--muted);width:100%}
+
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+  .phase{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
+  .phase b{display:block;font-size:.85rem;color:var(--accent)}
+  .phase span{font-size:.78rem;color:var(--muted)}
+  @media(max-width:640px){.phases{grid-template-columns:1fr}}
+
+  .weeks{display:flex;gap:8px;margin:22px 0 14px;flex-wrap:wrap}
+  .wk{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 16px;font-weight:600;cursor:pointer;font-size:.9rem;color:var(--muted)}
+  .wk.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .wk .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--line);margin-left:6px;vertical-align:middle}
+  .wk .dot.full{background:var(--done)}
+
+  .day{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:14px;overflow:hidden}
+  .day-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
+  .day-head:hover{background:#fafcfb}
+  .day-num{background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:.8rem;border-radius:8px;padding:6px 10px;white-space:nowrap}
+  .day-title{font-weight:650;font-size:1rem;flex:1}
+  .day-title small{display:block;font-weight:400;color:var(--muted);font-size:.8rem}
+  .chk{width:26px;height:26px;border:2px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;cursor:pointer;flex-shrink:0;transition:all .15s}
+  .chk.on{background:var(--done);border-color:var(--done)}
+  .caret{color:var(--muted);font-size:.8rem;transition:transform .2s}
+  .day.open .caret{transform:rotate(90deg)}
+  .day-body{display:none;border-top:1px solid var(--line);padding:6px 18px 14px}
+  .day.open .day-body{display:block}
+  .ex{padding:12px 0;border-bottom:1px dashed var(--line)}
+  .ex:last-child{border-bottom:none}
+  .ex-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+  .ex-name{font-weight:600;font-size:.95rem}
+  .ex-dose{color:var(--accent);font-weight:600;font-size:.85rem;white-space:nowrap}
+  .ex-cue{color:var(--muted);font-size:.85rem;margin-top:3px}
+  .why{font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:99px;display:inline-block;margin-top:6px}
+  .why.core{background:var(--accent2-soft);color:var(--accent2)}
+  .why.upper{background:var(--upper-soft);color:var(--upper)}
+
+  h2{font-size:1.05rem;margin:28px 0 10px;letter-spacing:-0.01em}
+  .habits,.avoid{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px}
+  .habits ul,.avoid ul{list-style:none}
+  .habits li,.avoid li{padding:7px 0;font-size:.9rem;display:flex;gap:10px;align-items:flex-start}
+  .habits li::before{content:"✓";color:var(--accent);font-weight:700}
+  .avoid li::before{content:"✕";color:#b6493c;font-weight:700}
+  .avoid{border-left:4px solid #e0b4ad}
+  footer{margin-top:30px;font-size:.78rem;color:var(--muted);max-width:680px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="pill">6-Week Program · 4 Days/Week · 15-20 Min</div>
+    <h1>Posture Reset: Pelvis + Upper Back</h1>
+    <p class="sub">One program for the whole chain: anterior pelvic tilt, rounded upper back, and forward head. The pattern is the same top to bottom, deep stabilizers asleep (transverse abdominis, deep neck flexors, lower traps), surface muscles overworking (lower back, hip flexors, pecs, upper traps). So every session strengthens the deep layer, releases the tight layer, and practices the stacked position. No front planks, per your massage therapist.</p>
+  </header>
+
+  <div class="progress-card">
+    <div class="progress-num"><b id="pnum">0/24</b><span>sessions done</span></div>
+    <div class="bar"><i id="pbar"></i></div>
+    <div class="note-mem" id="memnote">Check-offs are kept while this page is open. For a permanent log, tell me your progress and I'll update this tracker.</div>
+  </div>
+
+  <div class="phases">
+    <div class="phase"><b>Weeks 1-2 · Foundation</b><span>Learn the positions: breathing, chin tucks, tilt control, basic dead bugs and side planks. Quality over load.</span></div>
+    <div class="phase"><b>Weeks 3-4 · Load</b><span>Full versions, added resistance, longer stretches. Face pulls and rows get heavier.</span></div>
+    <div class="phase"><b>Weeks 5-6 · Integrate</b><span>Hardest variations, heavy carries, holding the stacked posture under fatigue. This is where it sticks.</span></div>
+  </div>
+
+  <div class="weeks" id="weeks"></div>
+  <div id="days"></div>
+
+  <h2>Daily habits (these do half the work)</h2>
+  <div class="habits">
+    <ul>
+      <li>Couch stretch 60s per side on rest days too, ideally after sitting.</li>
+      <li>Full-body posture cue 3x a day: exhale fully, ribs drop down, pelvis tucks about 10%, then glide the head straight back (double-chin, not looking down) and let the shoulders hang. Stack, don't strain.</li>
+      <li>Hourly desk reset: 5 chin tucks + 5 slow shoulder rolls back. Takes 20 seconds.</li>
+      <li>Raise your screen to eye level and bring your phone up instead of your head down. This single change beats any exercise for forward head.</li>
+      <li>When lifting heavy, brace with ribs stacked over pelvis, not flared up, and keep a neutral neck (look at the floor a few meters ahead on deadlifts, not the mirror).</li>
+      <li>Sleep: one medium pillow, not a stack. Back sleepers can add a pillow under the knees for the lower back.</li>
+    </ul>
+  </div>
+
+  <h2>Skip for now</h2>
+  <div class="avoid">
+    <ul>
+      <li>Front planks (per your therapist, they feed your lower back tension pattern).</li>
+      <li>Weighted back extensions, supermans, and heavy direct lower-back work. Your erectors are already overworked.</li>
+      <li>Forcing "shoulders back, chest up" military posture. It just arches your lower back more and swaps one tension for another. Ribs down first, then the shoulders hang in place naturally.</li>
+      <li>Sit-ups and leg raises done with an arched lower back. If your back arches off the floor, regress the exercise.</li>
+      <li>Extra pressing volume. Your pecs are already short and pulling you forward, so keep bench/press work moderate for these 6 weeks and match every press with a pull.</li>
+    </ul>
+  </div>
+
+  <footer>If any exercise causes sharp pain (not muscle burn), or tingling/numbness with the neck work, skip it and tell me. I'm not a medical professional, and since you have real lower back tension, a physio check is worth it if things persist or worsen.</footer>
+</div>
+
+<script>
+const PLAN = {
+  days: [
+    {
+      title:"Deep Layer Wake-Up", subtitle:"TVA + deep neck flexors + tilt control",
+      ex:{
+        p1:[
+          {n:"90/90 wall breathing", d:"3 × 5 breaths", c:"Feet on wall, hips/knees at 90°. Exhale ALL air until ribs drop and lower back melts into the floor, hold 3s, inhale into the sides of the ribs.", w:"TVA + ribs-down position", t:"core"},
+          {n:"Lying chin tuck", d:"2 × 10, 5s hold", c:"On your back. Make a gentle double chin, pressing the back of your head lightly into the floor. No nodding, no lifting, the effort is subtle.", w:"Wakes deep neck flexors", t:"upper"},
+          {n:"Dead bug, heel taps", d:"3 × 8/side", c:"Lower back glued to the floor the whole time. Exhale as the heel taps down. Slow, 3s per rep.", w:"TVA under movement", t:"core"},
+          {n:"Side plank from knees", d:"3 × 20-30s/side", c:"Straight line ear-shoulder-hip-knee. Push the floor away, don't sag into the shoulder.", w:"Obliques without spine load", t:"core"},
+          {n:"Glute bridge + posterior tilt", d:"2 × 12, 3s hold", c:"Tuck the pelvis FIRST, then lift. Squeeze glutes at top without arching the back.", w:"Glutes drive the tilt", t:"core"}
+        ],
+        p2:[
+          {n:"90/90 wall breathing", d:"2 × 5 breaths", c:"Now your warmup. Full exhale before everything else.", w:"Primes the pattern", t:"core"},
+          {n:"Chin tuck + head lift", d:"2 × 8, slow", c:"Chin tuck first, hold it, then lift the head 2cm off the floor keeping the double chin. Lower slowly. If your chin pokes out, rest and reset.", w:"Deep neck flexors under load", t:"upper"},
+          {n:"Full dead bug", d:"3 × 10/side", c:"Opposite arm + leg extend fully, heel hovers 5cm off the floor. Back stays flat. Exhale on the reach.", w:"Progression: full lever", t:"core"},
+          {n:"Side plank (full)", d:"3 × 30-40s/side", c:"From feet now. Squeeze glutes so hips don't drift back.", w:"More load, same shape", t:"core"},
+          {n:"Single-leg glute bridge", d:"2 × 10/side", c:"Pelvis stays level, no rotation, no back arch. Pause 2s at top.", w:"Anti-rotation + glutes", t:"core"}
+        ],
+        p3:[
+          {n:"90/90 wall breathing", d:"2 × 5 breaths", c:"Warmup. Own the exhale.", w:"Primes the pattern", t:"core"},
+          {n:"Resisted chin tuck", d:"2 × 10, 5s hold", c:"Loop a light band behind your head, hold the ends forward, glide the head back against it. Or keep doing head lifts with longer holds.", w:"Neck endurance", t:"upper"},
+          {n:"Band-resisted dead bug", d:"3 × 10/side", c:"Light band anchored overhead, or press a light plate to the ceiling. Back flat, slow.", w:"TVA under real load", t:"core"},
+          {n:"Side plank + top-leg raise", d:"3 × 30-45s/side", c:"Hold the plank, raise the top leg or hold it up. Hips tall.", w:"Glute med + obliques", t:"core"},
+          {n:"Barbell hip thrust w/ tilt", d:"3 × 8, 2s hold", c:"Moderate weight. Posterior tilt at lockout, ribs down, chin tucked. If your back arches, drop weight.", w:"Strong glutes control the pelvis", t:"core"}
+        ]
+      }
+    },
+    {
+      title:"Length: Hips + Chest + T-Spine", subtitle:"Release what's pulling you forward and down",
+      ex:{
+        p1:[
+          {n:"Couch stretch", d:"2 × 45s/side", c:"Rear foot on bench/wall. TUCK the pelvis first, then squeeze the rear glute. Feel the front of the hip, not the lower back.", w:"Lengthens hip flexors", t:"core"},
+          {n:"Foam roller t-spine extension", d:"2 × 8", c:"Roller across the mid-back, hands behind head, ribs DOWN. Extend the upper back over the roller, exhale at the bottom. Do not arch the lower back. Move the roller to 3 spots.", w:"Un-rounds the upper back", t:"upper"},
+          {n:"Doorway pec stretch", d:"2 × 30s/side", c:"Forearm on the frame, elbow at shoulder height, step through gently. Ribs down, no lower back arch. Mild stretch, not pain.", w:"Releases what rounds you", t:"upper"},
+          {n:"Standing wall tilt", d:"2 × 10", c:"Back against wall, feet 15cm out. Flatten the lower back into the wall by tucking, hold 3s, release halfway. Bonus: head gently touches the wall in a chin tuck.", w:"Neutral standing, head to hips", t:"core"},
+          {n:"Suitcase carry", d:"3 × 30s/side", c:"One moderate dumbbell. Walk tall, ribs stacked, don't lean.", w:"Lateral core, standing", t:"core"}
+        ],
+        p2:[
+          {n:"Couch stretch", d:"2 × 60s/side", c:"Same rules: tuck first, glute on, no back arch.", w:"Longer under stretch", t:"core"},
+          {n:"Roller t-spine extension + reach", d:"2 × 10", c:"Same setup, now add reaching both arms overhead at the bottom of each extension.", w:"Extension + shoulder opening", t:"upper"},
+          {n:"Doorway pec stretch", d:"2 × 40s/side", c:"Add gentle contract-relax: press the forearm into the frame 5s, relax deeper.", w:"PNF for lasting length", t:"upper"},
+          {n:"Wall tilt + march", d:"2 × 8/side", c:"Lower back lightly flat to the wall, head in contact via chin tuck, slowly march one knee up without losing either contact point.", w:"Full-stack control", t:"core"},
+          {n:"Suitcase carry", d:"3 × 40s/side", c:"Heavier. Shoulder packed down, no side lean.", w:"Load the pattern", t:"core"}
+        ],
+        p3:[
+          {n:"Couch stretch", d:"2 × 75s/side", c:"Contract-relax: push the foot into the wall 5s, relax deeper.", w:"PNF", t:"core"},
+          {n:"Bench t-spine mobilization", d:"2 × 8 breaths", c:"Kneel, elbows on a bench, hands behind neck, sit hips back and drop the chest toward the floor. Ribs down, exhale into it. Big lat + t-spine stretch.", w:"Deep extension + lats", t:"upper"},
+          {n:"Rear-foot-elevated split squat, light", d:"2 × 8/side", c:"Torso tall, pelvis tucked, sink straight down. A loaded hip flexor stretch on the rear leg.", w:"Strength in the new range", t:"core"},
+          {n:"Doorway pec stretch", d:"2 × 45s/side", c:"Contract-relax. By now the shoulders should sit visibly further back.", w:"Maintain the gains", t:"upper"},
+          {n:"Heavy suitcase carry", d:"3 × 40s/side", c:"Heavy enough that the last 10s is a fight. Position never breaks.", w:"Core strength that stands up", t:"core"}
+        ]
+      }
+    },
+    {
+      title:"Pull Day: Upper Back + Anti-Rotation", subtitle:"Build the muscles that hold you upright",
+      ex:{
+        p1:[
+          {n:"Face pull", d:"3 × 12", c:"Cable at upper-chest height, rope grip. Pull to the bridge of your nose, elbows high, end with knuckles by your ears (external rotation). Light weight, feel it between the shoulder blades, not in the neck.", w:"Rear delts + lower traps", t:"upper"},
+          {n:"Band pull-apart", d:"3 × 15", c:"Arms straight, band to chest. Chin tucked, ribs down, squeeze the blades together without shrugging.", w:"Upper back endurance", t:"upper"},
+          {n:"Half-kneeling Pallof press", d:"3 × 10/side", c:"Cable at chest height. Press out slow, resist the pull, ribs down, rear glute squeezed.", w:"Obliques, no spine load", t:"core"},
+          {n:"Side plank hip dips", d:"3 × 8/side (knees)", c:"Lower the hip toward the floor, lift back up. Controlled.", w:"Dynamic obliques", t:"core"},
+          {n:"Reverse crunch", d:"3 × 10", c:"Curl the pelvis UP off the floor with a full exhale. No momentum.", w:"Posterior tilt strength", t:"core"}
+        ],
+        p2:[
+          {n:"Face pull", d:"3 × 12, 2s hold", c:"A bit heavier, pause 2s in the end position every rep.", w:"Lower trap strength", t:"upper"},
+          {n:"Prone Y-T raise", d:"3 × 8 each", c:"Chest down on an incline bench. Raise arms to a Y (thumbs up), lower, then to a T. Light dumbbells or none. Chin stays tucked, don't crane the neck.", w:"Lower + mid traps directly", t:"upper"},
+          {n:"Standing Pallof press", d:"3 × 10/side", c:"Harder standing. Add 3s hold at full press.", w:"Progression", t:"core"},
+          {n:"Side plank hip dips (full)", d:"3 × 10/side", c:"From feet. Smooth tempo.", w:"More load", t:"core"},
+          {n:"Reverse crunch on incline", d:"3 × 10", c:"Slight incline, hold behind your head. Exhale hard as the pelvis curls up.", w:"More range", t:"core"}
+        ],
+        p3:[
+          {n:"Chest-supported row", d:"3 × 10", c:"Chest on incline bench, row dumbbells with elbows ~45°, squeeze blades down and back, chin tucked throughout.", w:"Upper back mass + strength", t:"upper"},
+          {n:"Prone Y-T-W", d:"2 × 6 each", c:"Add the W: elbows bent, squeeze blades down. Slow, light, perfect.", w:"Complete trap control", t:"upper"},
+          {n:"Pallof press + overhead raise", d:"3 × 8/side", c:"Press out, then raise arms overhead keeping ribs down. The band wants to arch and rotate you. Refuse.", w:"Anti-extension + anti-rotation", t:"core"},
+          {n:"High-to-low cable chop", d:"3 × 10/side", c:"Half-kneeling. Chop across the body, hips square, pelvis still.", w:"Rotation strength", t:"core"},
+          {n:"Hanging knee raise + tilt", d:"3 × 8", c:"Curl the pelvis under at the top (tailbone tucks forward). No swinging. This also decompresses the spine, a bonus for you.", w:"Strongest posterior tilt drill", t:"core"}
+        ]
+      }
+    },
+    {
+      title:"Integration", subtitle:"The whole stack under fatigue",
+      ex:{
+        p1:[
+          {n:"90/90 wall breathing", d:"2 × 5 breaths", c:"Reset. Full exhale, ribs down.", w:"Start in neutral", t:"core"},
+          {n:"Wall angel", d:"2 × 8, slow", c:"Back to wall, lower back LIGHTLY flat (small tuck), head touching via chin tuck. Arms in a W on the wall, slide up to a Y and back without anything peeling off. Shrink the range if you must, keep the contacts.", w:"The whole posture in one drill", t:"upper"},
+          {n:"Dead bug circuit", d:"3 rounds: 6/side + 20s hold", c:"6 heel taps per side, then hold tabletop 20s with back flat.", w:"TVA endurance", t:"core"},
+          {n:"Side plank finisher", d:"2 × max hold/side", c:"From knees. Stop when form breaks, note your time.", w:"Benchmark to beat", t:"core"},
+          {n:"Child's pose + side reach", d:"1 min/side", c:"Sink back, walk hands to one side, breathe into the opposite lower back.", w:"Decompress to finish", t:"core"}
+        ],
+        p2:[
+          {n:"Wall angel + chin tuck", d:"2 × 10, slower", c:"Same drill, 3s up, 3s down. The head never leaves the wall.", w:"Endurance in position", t:"upper"},
+          {n:"Full dead bug circuit", d:"3 rounds: 8/side + 25s hold", c:"Full dead bugs, then tabletop hold. Back never leaves the floor.", w:"Endurance under fatigue", t:"core"},
+          {n:"Copenhagen plank, short lever", d:"3 × 15s/side", c:"Bottom knee on floor, top knee on a bench, side plank position.", w:"Adductor + oblique chain", t:"core"},
+          {n:"Side plank finisher", d:"2 × max hold/side", c:"Full version. Beat your phase-1 time.", w:"Benchmark", t:"core"},
+          {n:"Child's pose + side reach", d:"1 min/side", c:"Slow nasal breathing.", w:"Downregulate the back", t:"core"}
+        ],
+        p3:[
+          {n:"Wall angel, feet closer", d:"2 × 12", c:"Feet nearly at the wall now, less cheating available. Full contact, full range.", w:"Graduation-level control", t:"upper"},
+          {n:"Weighted dead bug circuit", d:"3 rounds: 8/side + 30s hold", c:"Light plate pressed to the ceiling, then tabletop hold.", w:"Peak TVA endurance", t:"core"},
+          {n:"Copenhagen plank", d:"3 × 20s/side", c:"Extend the top leg further along the bench if you can.", w:"Progression", t:"core"},
+          {n:"Farmer carry + stop drill", d:"3 × 40s heavy", c:"Two heavy dumbbells. Every 10 steps: stop, exhale, chin tuck, re-stack ribs over pelvis, continue.", w:"The end goal: stacked under load", t:"core"},
+          {n:"Child's pose + side reach", d:"1 min/side", c:"Finish relaxed.", w:"Recovery", t:"core"}
+        ]
+      }
+    }
+  ]
+};
+
+let state = {week:1, done:{}};
+// Persist check-offs where storage is available (hosted/local file); degrade silently otherwise.
+try{
+  const saved = localStorage.getItem('postureResetState');
+  if(saved) state = Object.assign(state, JSON.parse(saved));
+}catch(e){}
+function save(){ try{ localStorage.setItem('postureResetState', JSON.stringify(state)); document.getElementById('memnote').textContent='Progress saves automatically on this device.'; }catch(e){} }
+
+function phaseFor(week){ return week<=2?"p1":week<=4?"p2":"p3"; }
+function phaseName(week){ return week<=2?"Foundation":week<=4?"Load":"Integrate"; }
+
+function renderWeeks(){
+  const el = document.getElementById('weeks');
+  el.innerHTML = '';
+  for(let w=1; w<=6; w++){
+    const b = document.createElement('button');
+    b.className = 'wk' + (w===state.week?' active':'');
+    const doneCount = [0,1,2,3].filter(d=>state.done[w+'-'+d]).length;
+    b.innerHTML = 'Wk '+w+'<span class="dot'+(doneCount===4?' full':'')+'"></span>';
+    b.onclick = ()=>{state.week=w; save(); render();};
+    el.appendChild(b);
+  }
+}
+
+function renderDays(){
+  const el = document.getElementById('days');
+  el.innerHTML = '';
+  const pk = phaseFor(state.week);
+  PLAN.days.forEach((day,i)=>{
+    const key = state.week+'-'+i;
+    const d = document.createElement('div');
+    d.className = 'day' + (i===0?' open':'');
+    d.innerHTML = `
+      <div class="day-head">
+        <div class="chk ${state.done[key]?'on':''}" data-key="${key}">${state.done[key]?'✓':''}</div>
+        <div class="day-num">Day ${i+1}</div>
+        <div class="day-title">${day.title}<small>${day.subtitle} · ${phaseName(state.week)} phase</small></div>
+        <div class="caret">▶</div>
+      </div>
+      <div class="day-body">
+        ${day.ex[pk].map(e=>`
+          <div class="ex">
+            <div class="ex-top"><span class="ex-name">${e.n}</span><span class="ex-dose">${e.d}</span></div>
+            <div class="ex-cue">${e.c}</div>
+            <span class="why ${e.t}">${e.t==='upper'?'upper back/neck · ':''}${e.w}</span>
+          </div>`).join('')}
+      </div>`;
+    d.querySelector('.day-head').onclick = (ev)=>{
+      if(ev.target.classList.contains('chk')) return;
+      d.classList.toggle('open');
+    };
+    d.querySelector('.chk').onclick = ()=>{
+      state.done[key] = !state.done[key];
+      save();
+      render();
+    };
+    el.appendChild(d);
+  });
+}
+
+function renderProgress(){
+  const total = 24;
+  const n = Object.values(state.done).filter(Boolean).length;
+  document.getElementById('pnum').textContent = n+'/'+total;
+  document.getElementById('pbar').style.width = (n/total*100)+'%';
+}
+
+function render(){ renderWeeks(); renderDays(); renderProgress(); }
+render();
+</script>
+</body>
+</html>
